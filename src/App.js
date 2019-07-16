@@ -1,10 +1,10 @@
 /*
  * @Project: funny screen
- * @Program name: 
+ * @Program name: App.js
  * @Author: Yiwen Liu
  * @Date: 2019-07-15 10:25:27
- * @LastEditTime: 2019-07-16 13:47:33
- * @Description: file content
+ * @LastEditTime: 2019-07-16 14:26:02
+ * @Description: The Main Enter file
  */
 
 import React from 'react';
