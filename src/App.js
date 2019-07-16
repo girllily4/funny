@@ -1,3 +1,12 @@
+/*
+ * @Project: funny screen
+ * @Program name: 
+ * @Author: Yiwen Liu
+ * @Date: 2019-07-15 10:25:27
+ * @LastEditTime: 2019-07-16 13:47:33
+ * @Description: file content
+ */
+
 import React from 'react';
 import './App.css';
 import AppItemList from './AppItemList'

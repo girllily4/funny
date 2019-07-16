@@ -1,3 +1,12 @@
+/*
+ * @Project: funny screen
+ * @Program name: AppItemList.js    `
+ * @Author: Yiwen Liu
+ * @Date: 2019-07-15 11:22:47
+ * @LastEditTime: 2019-07-16 14:08:33
+ * @Description: file content
+ */
+
 import React from 'react';
 
 class AppItemList extends React.Component {
@@ -8,13 +17,15 @@ class AppItemList extends React.Component {
         this.state = {
             newUrl: "",
             optionList: ["https://www.amazon.com", "https://www.netflix.com", "https://www.ted.com/#/", "https://www.youtube.com/"],
-            selectedOption: "",
+            selectedOption: undefined,
             newInterval: "",
             displayInterval: 10,
             myWindow: null,
             loop: 0
         };
     }
+
+    /* Handler */
 
     handleChange = (event) => {
         this.setState({ selectedOption: event.target.value });
@@ -28,12 +39,9 @@ class AppItemList extends React.Component {
         this.setState({ newInterval: event.target.value });
     }
 
-    componentDidMount() {
-        this.setState({ selectedOption: this.state.optionList[0] })
-    }
+    /* Functionality */
 
     moveUpOption = () => {
-        //get Index of url
         const index = this.state.optionList.indexOf(this.state.selectedOption);
 
         if (index > 0) {
@@ -45,6 +53,7 @@ class AppItemList extends React.Component {
                 optionList: nextOptionList
             })
         }
+        
     }
 
     moveDownOption = () => {
@@ -56,7 +65,7 @@ class AppItemList extends React.Component {
             nextOptionList[index + 1] = nextOptionList[index];
             nextOptionList[index] = temp;
             this.setState({
-                optionList: nextOptionList,
+                optionList: nextOptionList
             })
         }
     }
@@ -68,13 +77,14 @@ class AppItemList extends React.Component {
             nextOptionList.splice(index, 1);
             this.setState({
                 optionList: nextOptionList,
-                selectedOption: nextOptionList[0]
+                selectedOption: undefined
             })
         }
 
     }
 
     addUrl = () => {
+        // Regular Expression to detect the URL format
         let regexp = /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/;
         if (regexp.test(this.state.newUrl)) {
             let nextOptionList = [...this.state.optionList];
@@ -91,6 +101,7 @@ class AppItemList extends React.Component {
     }
 
     setPlayInterval = () => {
+        // Use isNaN to detect whether the input value is a number, otherwise alert the user
         if (isNaN(this.state.newInterval)) {
             alert("Wrong Input, Please Enter a valid number")
         }
@@ -104,31 +115,27 @@ class AppItemList extends React.Component {
     launchNavigate = () => {
         let i = 0;
         let urlList = [...this.state.optionList];
+
+        // Clean the existing loop function and close the window if click the launch button twice
         if (this.state.myWindow != null) {
             this.state.myWindow.close();
             clearInterval(this.state.loop);
         }
 
+        // loop the url list and change the url address every displayInterval seconds
+        const loop = setInterval(() => {
+            i++;
+            if (i >= urlList.length) {
+                i = 0;
+            }
+            this.state.myWindow.location.replace(urlList[i]);
+        }, this.state.displayInterval * 1000)
+
+        // set and open a new window with start with first url of the urlList
+        // save the loop function status to the state loop so that later the function can clear the loop
         this.setState({
-            myWindow: window.open(urlList[0], "_blank")
-        })
-
-
-
-        let that = this;
-
-        //console.log("Is myWindow null: " + (that.state.myWindow.location));
-
-        this.setState({
-            loop: setInterval(function () {
-                i++;
-                //console.log("this.state.myWindow.location: " + this.state.myWindow);
-                if (i >= urlList.length) {
-                    i = 0;
-                }
-                console.log(i);
-                that.state.myWindow.location = urlList[i];
-            }, this.state.displayInterval * 1000)
+            myWindow: window.open(urlList[0], "_blank"),
+            loop,
         })
 
     }
@@ -146,8 +153,8 @@ class AppItemList extends React.Component {
                             value={this.state.selectedOption}
                             onChange={this.handleChange}
                         >
-                            {this.state.optionList.map((item, index) => {
-                                return <option key={index}>{item}</option>
+                            {this.state.optionList.map((item) => {
+                                return <option key={item}>{item}</option>
                             })}
                         </select>
                     </div>

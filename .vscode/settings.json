@@ -1,0 +1,16 @@
+{
+    "fileheader.customMade": {
+        //"Github": "https://github.com/girllily4",
+        "Project": "funny screen",
+        "Program name": "",
+        "Author": "Yiwen Liu",
+        "Date": "Do not edit",
+        //"LastEditors": "Yiwen Liu",
+        "LastEditTime": "Do not edit",
+        "Description": "file content",
+    },
+    "fileheader.configObj": {
+        "autoAdd": true, // default with comments
+        "autoAlready": true, // add comments for supported language
+    }
+}
