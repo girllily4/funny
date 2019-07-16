@@ -9,7 +9,7 @@ class AppItemList extends React.Component {
             newUrl: "",
             optionList: ["https://www.amazon.com", "https://www.netflix.com", "https://www.ted.com/#/", "https://www.youtube.com/"],
             selectedOption: "",
-            newInterval: 0,
+            newInterval: "",
             displayInterval: 10,
             myWindow: null,
             loop: 0
@@ -86,14 +86,19 @@ class AppItemList extends React.Component {
         } else {
             alert("Wrong URL format")
         }
-        this.setState({newUrl: ""})
+        this.setState({ newUrl: "" })
 
     }
 
     setPlayInterval = () => {
-        this.setState({
-            displayInterval: this.state.newInterval
-        })
+        if (isNaN(this.state.newInterval)) {
+            alert("Wrong Input, Please Enter a valid number")
+        }
+        else {
+            this.setState({ displayInterval: this.state.newInterval, newInterval: "" })
+        }
+
+
     }
 
     launchNavigate = () => {
@@ -104,23 +109,28 @@ class AppItemList extends React.Component {
             clearInterval(this.state.loop);
         }
 
-        this.state.myWindow = window.open(urlList[0], "_blank")
-        
-        
+        this.setState({
+            myWindow: window.open(urlList[0], "_blank")
+        })
+
+
 
         let that = this;
 
-        console.log("Is myWindow null: " + (that.state.myWindow.location));
+        //console.log("Is myWindow null: " + (that.state.myWindow.location));
 
-        this.state.loop = setInterval(function () {
-            i++;
-            //console.log("this.state.myWindow.location: " + this.state.myWindow);
-            if (i >= urlList.length) {
-                i = 0;
-            }
-            console.log(i);
-            that.state.myWindow.location = urlList[i];
-        }, this.state.displayInterval * 1000);
+        this.setState({
+            loop: setInterval(function () {
+                i++;
+                //console.log("this.state.myWindow.location: " + this.state.myWindow);
+                if (i >= urlList.length) {
+                    i = 0;
+                }
+                console.log(i);
+                that.state.myWindow.location = urlList[i];
+            }, this.state.displayInterval * 1000)
+        })
+
     }
 
     render() {
@@ -159,7 +169,7 @@ class AppItemList extends React.Component {
                                 className="form-control"
                                 id="new-option"
                                 placeholder="Add a new url"
-                                value = {this.state.newUrl}
+                                value={this.state.newUrl}
                                 onChange={this.handleChangeUrl}
                             ></input>
                         </div>
@@ -175,6 +185,7 @@ class AppItemList extends React.Component {
                             className="form-control mb-2 mr-sm-2"
                             id="interval"
                             placeholder="Set Interval"
+                            value={this.state.newInterval}
                             onChange={this.handleChangeInterval}>
                         </input>
                     </div>
@@ -193,7 +204,7 @@ class AppItemList extends React.Component {
                 </div>
 
                 <br></br>
-                <button className="btn btn-dark btn-lg btn-block" onClick = {this.launchNavigate}>Launch</button>
+                <button className="btn btn-dark btn-lg btn-block" onClick={this.launchNavigate}>Launch</button>
 
 
             </div>
